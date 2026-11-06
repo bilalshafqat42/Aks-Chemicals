@@ -350,3 +350,8 @@ header:has(.burger[aria-expanded="true"]){background:var(--ink);border-bottom-co
 .nf-btn{display:inline-block;font-family:var(--m);font-weight:500;font-size:11px;letter-spacing:.18em;
   text-transform:uppercase;color:var(--ink);background:var(--bone);padding:16px 22px;border-radius:2px;transition:background .3s,color .3s}
 .nf-btn:hover{background:var(--dye);color:#fff}
+
+/* ---------- footer credit ---------- */
+.fbot .maker a{color:var(--bone);text-decoration:underline;text-decoration-color:var(--ink3);
+  text-underline-offset:3px;transition:color .25s,text-decoration-color .25s}
+.fbot .maker a:hover{color:var(--dye-tx);text-decoration-color:currentColor}

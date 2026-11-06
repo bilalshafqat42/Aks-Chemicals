@@ -50,6 +50,13 @@ export default function SiteFooter() {
           &copy; <Year /> {company.name}
         </span>
         <span className="mono">{isoFull} &middot; REACH</span>
+        {/* Followed link (no rel="nofollow"), opens in a new tab */}
+        <span className="mono maker">
+          Designed and developed by{" "}
+          <a href="https://bilalshafqat.com/" target="_blank" rel="noopener">
+            Bilal Shafqat
+          </a>
+        </span>
         <span className="mono credit">
           Photography: RephiLe water &middot; Bergstrand Consultancy &middot; Jimmy Nilsson Masth / Unsplash
         </span>
