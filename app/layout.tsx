@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import ScrollFX from "@/components/ScrollFX";
-import { company } from "@/lib/content";
+import { company, shots } from "@/lib/content";
 import "./globals.css";
 
 const display = localFont({
@@ -32,15 +32,40 @@ const mono = localFont({
   src: [{ path: "./fonts/jetbrains-mono-latin-500-normal.woff2", weight: "500", style: "normal" }],
 });
 
+const description = `Manufacturer and supplier of textile chemicals. Pretreatment, dyeing auxiliaries, finishes, denim washing and special finishing. ${company.city}, since ${company.founded}.`;
+
 export const metadata: Metadata = {
-  title: "AKS Chemicals",
-  description:
-    "Manufacturer and supplier of textile chemicals. Pretreatment, dyeing auxiliaries, finishes, denim washing and special finishing. Lahore, Pakistan, since 1987.",
+  metadataBase: new URL(company.siteUrl),
+  title: `${company.name} | ${company.tagline}`,
+  description,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: company.name,
+    title: company.name,
+    description,
+    url: "/",
+    images: [{ url: shots.production.src, width: shots.production.w, height: shots.production.h, alt: shots.production.alt }],
+  },
+  twitter: { card: "summary_large_image", title: company.name, description, images: [shots.production.src] },
 };
+
+/**
+ * Runs before first paint. Reveal animations only hide content once this class
+ * is present, so the page stays fully readable if JavaScript fails to load.
+ */
+const jsFlag = `document.documentElement.classList.add("js")`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
+    <html
+      lang="en"
+      className={`${display.variable} ${body.variable} ${mono.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: jsFlag }} />
+      </head>
       <body>
         {children}
         <ScrollFX />

@@ -1,10 +1,11 @@
 import Image from "next/image";
-import { company, ranges } from "@/lib/content";
+import Year from "./Year";
+import { company, isoFull, ranges, summary } from "@/lib/content";
 
 const ABOUT = [
-  { href: "#about", label: "About us" },
   { href: "#about", label: "Who we are" },
   { href: "#ranges", label: "What we do" },
+  { href: "#toll", label: "Toll manufacturing" },
   { href: "#compliance", label: "REACH compliance" },
   { href: "#contact", label: "Contact us" },
 ];
@@ -14,8 +15,8 @@ export default function SiteFooter() {
     <footer>
       <div className="fgrid">
         <div>
-          <Image src="/img/aks-logo-white.png" alt="AKS Chemicals" width={403} height={36} />
-          <p>Manufacturer and supplier of textile chemicals. Lahore, Pakistan, since 1987.</p>
+          <Image src="/img/aks-logo-white.png" alt={company.name} width={403} height={36} />
+          <p>{summary}</p>
         </div>
 
         <div className="fcol">
@@ -40,19 +41,17 @@ export default function SiteFooter() {
           <b>Get in touch</b>
           <a href={`mailto:${company.email}`}>{company.email}</a>
           <a href={`tel:${company.phones[0].replace(/\s/g, "")}`}>{company.phones[0]}</a>
-          <a href="#contact">544 A Faisal Town, Lahore</a>
+          <a href="#contact">{company.addressShort}</a>
         </div>
       </div>
 
       <div className="fbot">
-        <span className="mono">&copy; {new Date().getFullYear()} AKS Chemicals</span>
-        <span className="mono">ISO 9001:2008 &middot; REACH</span>
-        <span
-          className="mono"
-          style={{ flexBasis: "100%", color: "#5A6370", fontSize: "9.5px", letterSpacing: ".14em" }}
-        >
-          Photography: Unsplash licence &middot; RephiLe water &middot; Bergstrand Consultancy &middot;
-          Jimmy Nilsson Masth &middot; placeholder until AKS supply their own
+        <span className="mono">
+          &copy; <Year /> {company.name}
+        </span>
+        <span className="mono">{isoFull} &middot; REACH</span>
+        <span className="mono credit">
+          Photography: RephiLe water &middot; Bergstrand Consultancy &middot; Jimmy Nilsson Masth / Unsplash
         </span>
       </div>
     </footer>

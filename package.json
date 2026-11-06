@@ -6,17 +6,20 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint .",
+    "package": "next build && rm -f aks-chemicals-website-upload.zip && cd out && zip -qrX ../aks-chemicals-website-upload.zip . -x '.DS_Store' && cd .. && echo 'Ready: aks-chemicals-website-upload.zip'"
   },
   "dependencies": {
-    "next": "15.1.6",
-    "react": "19.0.0",
-    "react-dom": "19.0.0"
+    "next": "^16.4.5",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
   },
   "devDependencies": {
     "@types/node": "22.10.6",
-    "@types/react": "19.0.7",
-    "@types/react-dom": "19.0.3",
-    "typescript": "5.7.3"
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.4.5",
+    "typescript": "^5.9.3"
   }
 }

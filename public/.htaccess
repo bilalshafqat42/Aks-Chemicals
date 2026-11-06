@@ -1,0 +1,53 @@
+# Static hosting rules for the exported site (Hostinger / LiteSpeed / Apache).
+# This file replaces the WordPress .htaccess. Kept to widely supported
+# directives: a bad line here takes the whole site down.
+
+# Serve the new site, even if an old WordPress index.php is left behind.
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+AddDefaultCharset UTF-8
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Always serve over HTTPS, on akschemicals.com (no www).
+  # Reads as: (not HTTPS and not HTTPS-behind-proxy) OR www.
+  RewriteCond %{HTTPS} !=on [OR]
+  RewriteCond %{HTTP_HOST} ^www\. [NC]
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https [OR]
+  RewriteCond %{HTTP_HOST} ^www\. [NC]
+  RewriteRule ^ https://akschemicals.com%{REQUEST_URI} [R=301,L]
+
+  # Old WordPress addresses -> sections of the new page, so links and search rankings carry over.
+  RewriteRule ^(home|homepage)/?$ / [R=301,L]
+  RewriteRule ^contact(-us)?/?$ /#contact [NE,R=301,L]
+  RewriteRule ^(about|about-us)/?$ /#about [NE,R=301,L]
+  RewriteRule ^(reach|reach-compliance|reach-compilance|compliance)/?$ /#compliance [NE,R=301,L]
+  RewriteRule ^(services|products|textile)/?$ /#ranges [NE,R=301,L]
+  RewriteRule ^(toll|toll-manufacturing)/?$ /#toll [NE,R=301,L]
+  RewriteRule ^(20[0-9]{2}/.*|category/.*|author/.*|tag/.*|blog)/?$ / [R=301,L]
+  RewriteRule ^(feed|comments/feed|wp-admin|wp-login\.php|xmlrpc\.php|wp-content|wp-includes|wp-json)(/.*)?$ / [R=301,L]
+  RewriteRule ^wp-sitemap.*\.xml$ /sitemap.xml [R=301,L]
+</IfModule>
+
+# Compress text files.
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain application/javascript application/json image/svg+xml
+</IfModule>
+
+# Cache: hashed build files for a year, images for a month, HTML always fresh.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+</IfModule>
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css|woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+</IfModule>

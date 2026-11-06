@@ -1,5 +1,5 @@
 import Shot from "./Shot";
-import { capabilities, shots } from "@/lib/content";
+import { capabilities, company, shots } from "@/lib/content";
 
 export default function About() {
   return (
@@ -12,7 +12,7 @@ export default function About() {
       <div className="grid">
         <div className="body rv c7" data-d="1">
           <p className="lead" style={{ color: "var(--bone)", maxWidth: "28ch", marginBottom: 34 }}>
-            Established in 1987 in the heartland of the Pakistan textile industry.
+            Established in {company.founded} in the heartland of the Pakistan textile industry.
           </p>
           <p>
             AKS Chemicals has grown to become one of the world leaders in the manufacture and supply

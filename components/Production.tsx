@@ -11,7 +11,7 @@ export default function Production() {
         <Shot
           {...shots.production}
           ratio="21/9"
-          caption={["Fig. 01 / Production", "Lahore, Pakistan"]}
+          caption={["Fig. 01 / Production", "Wet processing"]}
           sizes="100vw"
           priority
         />
