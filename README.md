@@ -1,37 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# AKS Chemicals
 
-## Getting Started
+Homepage for AKS Chemicals, built with Next.js 15 (App Router) and TypeScript.
 
-First, run the development server:
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # http://localhost:3000
+npm run build   # production build
+npm start       # serve the production build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Where things live
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+| What you want to change | File |
+|---|---|
+| All copy, ranges, contact details, image paths | `lib/content.ts` |
+| Colours, type scale, spacing, breakpoints | `app/globals.css` (tokens are at the top, in `:root`) |
+| Page order | `app/page.tsx` |
+| A single section | `components/<Section>.tsx` |
+| Photographs and logo | `public/img/` |
+| Fonts | `app/fonts/` + `app/layout.tsx` |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The content model is the point. Add a sixth range by adding one object to
+`ranges` in `lib/content.ts` and it appears in the list, in the footer and in
+the enquiry form dropdown. Nothing else needs touching.
 
-## Learn More
+## Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/
+  layout.tsx       fonts, metadata, html shell
+  page.tsx         section order
+  globals.css      the whole design system
+  fonts/           Newsreader, Inter, JetBrains Mono (woff2, self-hosted)
+components/
+  ScrollFX.tsx     the only client component: sticky header + scroll reveals
+  ContactForm.tsx  client component, form state
+  Shot.tsx         reusable image slot with its Fig. caption
+  ...              one file per section
+lib/content.ts     every string and every list on the page
+public/img/        photographs and the AKS logo
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Design notes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Dark ink canvas with warm bone paper sections. Tokens in `:root`.
+- Display face is Newsreader, body is Inter, labels and data are JetBrains Mono.
+- Accent `--dye: #C2552B`. Brand navy `--navy: #163464`, taken from the logo.
+- Fonts are self-hosted via `next/font/local`, so there is no Google Fonts
+  request and no layout shift.
+- Scroll reveals are one `IntersectionObserver` adding `.in` to `.rv` elements.
+  They are disabled under `prefers-reduced-motion`.
 
-## Deploy on Vercel
+## Before it goes live
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **Photography.** The four shots in `public/img/` are Unsplash placeholders
+   (free licence, commercial use allowed, no attribution required). Replace them
+   with AKS's own and update the credit line in `components/SiteFooter.tsx`.
+   Keep the ratios: production 21:9, laboratory 4:5, finishing 16:11, plant 4:5.
+2. **The enquiry form** currently just prevents default. Point
+   `components/ContactForm.tsx` at a route handler, a form service or an email
+   API.
+3. **Mobile nav.** The burger button is styled but has no menu behind it yet.
+4. **Check the facts with the client.** ISO 9001:2008 and the REACH wording came
+   off the existing akschemicals.com. Confirm the certification is current before
+   publishing.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# Aks-Chemicals
+## Deploy
+
+Deploys to Vercel as-is. Any Node host works with `npm run build && npm start`.
