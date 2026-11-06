@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import ScrollFX from "@/components/ScrollFX";
-import { company, shots } from "@/lib/content";
+import { company, ranges, shots } from "@/lib/content";
 import "./globals.css";
 
 const display = localFont({
@@ -56,6 +56,54 @@ export const metadata: Metadata = {
  */
 const jsFlag = `document.documentElement.classList.add("js")`;
 
+/**
+ * Structured data for search engines and AI assistants: who AKS is, where, since
+ * when, and what it makes. Built from lib/content.ts, so it cannot drift from the
+ * page. No ISO edition here until the current certificate is confirmed.
+ */
+const orgSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": `${company.siteUrl}/#organization`,
+  name: company.name,
+  url: company.siteUrl,
+  logo: `${company.siteUrl}/img/aks-logo.png`,
+  description,
+  foundingDate: String(company.founded),
+  email: company.email,
+  telephone: company.phones[0].replace(/\s+/g, ""),
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: company.address[0],
+    addressLocality: "Lahore",
+    addressCountry: "PK",
+  },
+  areaServed: "Worldwide",
+  knowsAbout: [
+    "Textile chemicals",
+    "Textile auxiliaries",
+    ...ranges.map((r) => r.name),
+    "Toll manufacturing",
+  ],
+  makesOffer: ranges.map((r) => ({
+    "@type": "Offer",
+    itemOffered: { "@type": "Product", name: `${r.name} chemicals`, description: r.blurb },
+  })),
+};
+
+const siteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${company.siteUrl}/#website`,
+  url: company.siteUrl,
+  name: company.name,
+  publisher: { "@id": `${company.siteUrl}/#organization` },
+  inLanguage: "en",
+};
+
+/** Escapes "<" so a string in the data can never close the script tag. */
+const jsonLd = (o: object) => JSON.stringify(o).replace(/</g, "\\u003c");
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
@@ -65,6 +113,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: jsFlag }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(orgSchema) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(siteSchema) }} />
       </head>
       <body>
         {children}
